@@ -2,7 +2,7 @@
 
 ## Conceito
 
-- Ser uma plataforma para divulgação de artes, para artistas undergrownd até os artistas mainstreams.
+- Ser uma plataforma para divulgação de artes, para artistas underground até os artistas mainstreams.
 - Sistema de divulgação de novos artistas.
 
 ## Especificações
