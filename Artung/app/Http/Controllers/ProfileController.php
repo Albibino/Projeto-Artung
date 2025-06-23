@@ -62,7 +62,11 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
-        return view('profile.show', compact('user'));
+        $ownPosts = $user->posts()->latest()->get();
+
+        $likedPosts = $user->likedPosts()->latest()->get();
+
+        return view('profile.show', compact('user', 'ownPosts', 'likedPosts'));
     }
 
     public function updatePhoto(Request $request)

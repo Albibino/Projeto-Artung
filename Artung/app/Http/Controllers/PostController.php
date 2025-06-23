@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -15,22 +16,33 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'description' => 'nullable|string',
+        $data = $request->validate([
+            'title'         => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'image'         => 'required|image',
+            'tag1_id'       => 'nullable|exists:tags,id',
+            'tag2_id'       => 'nullable|exists:tags,id',
+            'tag3_id'       => 'nullable|exists:tags,id',
         ]);
 
-        $imagePath = $request->file('image')->store('posts', 'public');
-
-        Post::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image_path' => $imagePath,
-            'user_id' => auth()->id(),
+            $tags = array_filter([
+        $data['tag1_id'] ?? null,
+        $data['tag2_id'] ?? null,
+        $data['tag3_id'] ?? null,
         ]);
+        if (count($tags) !== count(array_unique($tags))) {
+            return back()
+                ->withInput()
+                ->withErrors(['tags' => 'Você deve selecionar tags diferentes.']);
+        }
 
-        return redirect()->route('home')->with('success', 'Post criado com sucesso!');
+
+        $data['image_path'] = $request->file('image')->store('posts', 'public');
+        $data['user_id'] = auth()->id();
+        $post = Post::create($data);
+
+        return redirect()->route('home')
+                        ->with('success', 'Post criado com sucesso!');
     }
 
     public function destroy(Post $post)
@@ -46,5 +58,29 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('home')->with('success', 'Post excluído com sucesso!');
+    }
+
+    public function like(Post $post)
+    {
+        $user = Auth::user();
+
+        if (! $post->likes()->where('user_id', $user->id)->exists()) {
+            $post->likes()->create([
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return back();
+    }
+
+    public function unlike(Post $post)
+    {
+        $user = Auth::user();
+
+        $post->likes()
+             ->where('user_id', $user->id)
+             ->delete();
+
+        return back();
     }
 }

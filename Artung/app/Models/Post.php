@@ -12,6 +12,9 @@ class Post extends Model
         'description',
         'image_path',
         'user_id',
+        'tag1_id',
+        'tag2_id',
+        'tag3_id',
     ];
 
     public function user()
@@ -23,4 +26,8 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function tag1() { return $this->belongsTo(Tag::class, 'tag1_id'); }
+    public function tag2() { return $this->belongsTo(Tag::class, 'tag2_id'); }
+    public function tag3() { return $this->belongsTo(Tag::class, 'tag3_id'); }
 }

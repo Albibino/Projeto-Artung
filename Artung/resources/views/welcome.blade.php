@@ -27,14 +27,14 @@
                     @else
                         <a
                             href="{{ route('login') }}"
-                            class="inline-block px-7 py-3.5 dark:text-[#EDEDEC] text-[#1b1b18] border-2 border-[#19140035] hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-lg text-lg leading-normal font-medium shadow-sm hover:shadow-md transition-all duration-200">
+                            class="bg-white inline-block px-7 py-3.5 dark:text-[#EDEDEC] text-[#1b1b18] border-2 border-[#19140035] hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-lg text-lg leading-normal font-medium shadow-sm hover:shadow-md transition-all duration-200">
                             Entrar
                         </a>
 
                         @if (Route::has('register'))
                             <a
                                 href="{{ route('register') }}"
-                                class="inline-block px-7 py-3.5 dark:text-[#EDEDEC] border-2 border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-lg text-lg leading-normal font-medium shadow-sm hover:shadow-md transition-all duration-200">
+                                class="bg-white inline-block px-7 py-3.5 dark:text-[#EDEDEC] border-2 border-[#19140035] hover:border-[#1915014a] text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-lg text-lg leading-normal font-medium shadow-sm hover:shadow-md transition-all duration-200">
                                 Registrar-se
                             </a>
                         @endif

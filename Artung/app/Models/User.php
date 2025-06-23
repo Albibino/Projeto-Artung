@@ -59,4 +59,11 @@ class User extends Authenticatable
             ? asset("storage/{$this->profile_photo_path}")
             : asset('default-avatar.png');
     }
+
+    public function likedPosts()
+    {
+
+        return $this->belongsToMany(Post::class, 'likes')
+                    ->withTimestamps();
+    }
 }

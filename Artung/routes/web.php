@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
@@ -33,16 +34,32 @@ Route::middleware(['auth', 'banned'])->group(function () {
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 Route::get('/profile/{user}', function (User $user) {
-    return view('profile.show', ['user' => $user]);
+    return view('profile.show'     , ['user' => $user]);
 })->middleware(['auth'])->name('profile.show');
 
 Route::middleware('auth')->group(function () {
-Route::get('/profile/{user}', [ProfileController::class, 'show'])
+Route::get('/profile/{user}'       , [ProfileController::class, 'show'])
      ->name('profile.show')
      ->middleware('auth');
 
-    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])
+    Route::post('/profile/photo'   , [ProfileController::class, 'updatePhoto'])
          ->name('profile.photo.update');
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get  ('/tags'           , [TagController::class, 'index'  ])->name('tags.index');
+    Route::get  ('/tags/create'    , [TagController::class, 'create' ])->name('tags.create');
+    Route::post ('/tags'           , [TagController::class, 'store'  ])->name('tags.store');
+    Route::get  ('/tags/{tag}/edit', [TagController::class, 'edit'   ])->name('tags.edit');
+    Route::put  ('/tags/{tag}'     , [TagController::class, 'update' ])->name('tags.update');
+    Route::delete('/tags/{tag}'    , [TagController::class, 'destroy'])->name('tags.destroy');
+});
+
+Route::middleware('auth')->group(function(){
+    Route::post('/posts/{post}/like', [App\Http\Controllers\PostController::class, 'like'])
+         ->name('posts.like');
+    Route::delete('/posts/{post}/like', [App\Http\Controllers\PostController::class, 'unlike'])
+         ->name('posts.unlike');
 });
 
 require __DIR__.'/auth.php';

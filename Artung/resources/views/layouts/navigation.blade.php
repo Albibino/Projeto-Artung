@@ -27,7 +27,14 @@
             {{ __('Criar Post') }}
         </x-nav-link>
 
-        {{-- Adicione outros links aqui, um por linha --}}
+                <x-nav-link 
+            :href="route('tags.index')" 
+            :active="request()->routeIs('tags.index')"
+            class="block py-2"
+        >
+            {{ __('Criar Tags') }}
+        </x-nav-link>
+        
     </div>
 
     {{-- Bloco de perfil no rodapé --}}

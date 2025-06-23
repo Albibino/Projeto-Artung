@@ -18,6 +18,18 @@ return new class extends Migration
         $table->text('description')->nullable();
         $table->string('image_path');
         $table->timestamps();
+        $table->foreignId('tag1_id')
+                  ->nullable()
+                  ->constrained('tags')
+                  ->nullOnDelete();
+        $table->foreignId('tag2_id')
+                  ->nullable()
+                  ->constrained('tags')
+                  ->nullOnDelete();
+        $table->foreignId('tag3_id')
+                  ->nullable()
+                  ->constrained('tags')
+                  ->nullOnDelete();
         });
 
         Schema::create('likes', function (Blueprint $table) {
