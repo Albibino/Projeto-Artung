@@ -22,11 +22,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($recentPosts as $post)
                     <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
-                        <div class="aspect-w-16 aspect-h-9">
+                        <div class="overflow-hidden rounded-t">
                             <img
                                 src="{{ asset('storage/'.$post->image_path) }}"
                                 alt="{{ $post->title }}"
-                                class="w-full h-full object-cover"
+                                class="w-full h-auto object-cover max-h-96"
                             >
                         </div>
 
@@ -53,6 +53,24 @@
                                     {{ $post->user->name }}
                                 </a>
                                 </p>
+
+                                @if(auth()->user()->isAdmin() or auth()->user()->isModerator())
+                                    <form
+                                    action="{{ route('posts.PostdestroyAdmin', $post) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Tem certeza que deseja excluir esse post?')"
+                                    class="mt-4 text-right"
+                                    >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        class="text-red-600 hover:text-red-800 text-sm"
+                                    >
+                                        🗑️ Excluir Post
+                                    </button>
+                                    </form>
+                                @endif
 
                                 <div class="flex items-center space-x-2">
                                     @auth
@@ -97,11 +115,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($popularPosts as $post)
                     <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow flex flex-col overflow-hidden">
-                        <div class="aspect-w-16 aspect-h-9">
+                        <div class="overflow-hidden rounded-t">
                             <img
                                 src="{{ asset('storage/'.$post->image_path) }}"
                                 alt="{{ $post->title }}"
-                                class="w-full h-full object-cover"
+                                class="w-full h-auto object-cover max-h-96"
                             >
                         </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
@@ -126,6 +144,23 @@
                                     {{ $post->user->name }}
                                 </a>
                                 </p>
+                                @if(auth()->user()->isAdmin() or auth()->user()->isModerator())
+                                    <form
+                                    action="{{ route('posts.PostdestroyAdmin', $post) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Tem certeza que deseja excluir esse post?')"
+                                    class="mt-4 text-right"
+                                    >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        class="text-red-600 hover:text-red-800 text-sm"
+                                    >
+                                        🗑️ Excluir Post
+                                    </button>
+                                    </form>
+                                @endif
                                 <div class="flex items-center space-x-2">
                                     @auth
                                         @php

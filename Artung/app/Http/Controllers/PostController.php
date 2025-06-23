@@ -60,6 +60,18 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Post excluído com sucesso!');
     }
 
+       public function PostdestroyAdmin(Post $post)
+    {
+
+        if ($post->image_path) {
+            \Storage::disk('public')->delete($post->image_path);
+        }
+
+        $post->delete();
+
+        return redirect()->route('home')->with('success', 'Post excluído com sucesso!');
+    }
+
     public function like(Post $post)
     {
         $user = Auth::user();

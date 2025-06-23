@@ -3,45 +3,56 @@
 @section('content')
   <div class="max-w-4xl mx-auto px-4 space-y-8">
 
-    {{-- Foto e upload --}}
     <div class="flex items-center space-x-6">
-      <div class="relative w-32 h-32 rounded-full overflow-hidden group">
-        <img
-          src="{{ $user->profile_photo_url }}"
-          alt="Foto de perfil de {{ $user->name }}"
-          class="w-full h-full object-cover"
-        >
+      @php
+          $photo = $user->profile_photo_path
+                && file_exists(public_path('storage/'.$user->profile_photo_path))
+              ? asset('storage/'.$user->profile_photo_path)
+              : asset('images/default-avatar.gif');
+      @endphp
 
-        @if(auth()->id() === $user->id)
-          <form
-            action="{{ route('profile.photo.update') }}"
-            method="POST"
-            enctype="multipart/form-data"
-            class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+      <div class="relative w-32 h-32 rounded-full overflow-hidden group">
+          <img
+              class="w-32 h-32 rounded-full object-cover"
+              src="{{ $photo }}"
+              alt="Foto de perfil de {{ $user->name }}"
           >
-            @csrf
-            <label for="photo" class="cursor-pointer text-white px-3 py-1 bg-gray-800 bg-opacity-75 rounded">
-              Alterar
-            </label>
-            <input
-              id="photo"
-              name="photo"
-              type="file"
-              accept="image/*"
-              class="hidden"
-              onchange="this.form.submit()"
+
+          @if(auth()->id() === $user->id)
+            <form
+              action="{{ route('profile.photo.update') }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full"
             >
-          </form>
-        @endif
+              @csrf
+              <label for="photo" class="cursor-pointer text-white px-3 py-1 bg-gray-800 bg-opacity-75 rounded">
+                Alterar
+              </label>
+              <input
+                id="photo"
+                name="photo"
+                type="file"
+                accept="image/*"
+                class="hidden"
+                onchange="this.form.submit()"
+              >
+            </form>
+          @endif
       </div>
 
-      <div>
+    <div>
         <h1 class="text-3xl font-bold text-gray-900">Perfil de {{ $user->name }}</h1>
         <p class="mt-1 text-gray-600">{{ $user->email }}</p>
       </div>
     </div>
 
-    {{-- Posts --}}
+    @if($user->banned_at)
+      <div class="p-6 bg-red-100 border border-red-300 text-red-800 rounded-lg text-center">
+        Usuário banido em {{ $user->banned_at->format('d/m/Y H:i') }}.
+      </div>
+    @else
+
     <section class="space-y-4">
       <h2 class="text-2xl font-semibold text-gray-800">Posts de {{ $user->name }}</h2>
 
@@ -51,7 +62,6 @@
         <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($user->posts as $post)
             <li class="bg-white rounded-lg shadow hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-              {{-- Imagem --}}
               <div class="aspect-w-16 aspect-h-9">
                 <img
                   src="{{ asset('storage/' . $post->image_path) }}"
@@ -134,4 +144,5 @@
       @endif
     </div>
   </div>
+  @endif
 @endsection

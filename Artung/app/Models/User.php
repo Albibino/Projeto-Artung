@@ -23,8 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo_path',
+        'banned_at',
+        'role',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -43,10 +44,12 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'banned_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
+
 
     public function posts()
     {
@@ -65,5 +68,20 @@ class User extends Authenticatable
 
         return $this->belongsToMany(Post::class, 'likes')
                     ->withTimestamps();
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isModerator()
+    {
+        return $this->role === 'moderator';
+    }
+
+    public function isUser()
+    {
+        return $this->role === 'user';
     }
 }
