@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Acesso Bloqueado</title>
+    <title>Acesso Negado</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/postcss7-compat@^2/dist/tailwind.min.css">
 
      @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -19,8 +19,8 @@
                 <div class="text-[14px] leading-[21px] flex-1 p-8 pb-16 lg:p-28 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none flex flex-col justify-center">
                     
                     <div>
-                        <h1 class="mb-3 font-medium text-xl lg:text-2xl">Você foi banido!</h1>
-                        <p class="mb-4 text-[#706f6c] dark:text-[#A1A09A] text-base">Você foi banido permanentemente, caso ache que isso é um erro, entre em contato com os administradores.</p>
+                        <h1 class="mb-3 font-medium text-xl lg:text-2xl">Calma ai!</h1>
+                        <p class="mb-4 text-[#706f6c] dark:text-[#A1A09A] text-base">Você não tem permissão pra acessar isso aqui.</p>
                         
                     </div>
                 </div>

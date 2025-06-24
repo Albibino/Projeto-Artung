@@ -62,30 +62,58 @@
         <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($user->posts as $post)
             <li class="bg-white rounded-lg shadow hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-              <div class="aspect-w-16 aspect-h-9">
+              <div class="overflow-hidden rounded-t">
                 <img
                   src="{{ asset('storage/' . $post->image_path) }}"
                   alt="{{ $post->title }}"
-                  class="w-full h-full object-cover"
+                  class="w-full h-auto object-cover max-h-80"
                 >
               </div>
 
               <div class="p-4 flex-1 flex flex-col justify-between">
                 <h3 class="text-lg font-bold text-gray-800">{{ $post->title }}</h3>
 
-                @if(auth()->id() === $post->user_id)
-                  <form
-                    action="{{ route('posts.destroy', $post) }}"
-                    method="POST"
-                    class="mt-4 text-right"
-                    onsubmit="return confirm('Excluir post “{{ $post->title }}”?');"
-                  >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
-                      🗑️ Excluir
-                    </button>
-                  </form>
+                @php $viewer = auth()->user(); @endphp
+
+                @if($viewer->isAdmin() || $viewer->isModerator())
+
+                  <div class="flex justify-end space-x-4 mt-4">
+                    <a href="{{ route('posts.edit', $post) }}"
+                      class="text-blue-600 hover:text-blue-800 text-sm inline-block">
+                      ✏️ Editar
+                    </a>
+                    <form action="{{ route('posts.PostdestroyAdmin', $post) }}"
+                          method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esse post?')"
+                          class="inline">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                              class="text-red-600 hover:text-red-800 text-sm">
+                        🗑️ Excluir Post (Admin)
+                      </button>
+                    </form>
+                  </div>
+
+                @elseif($viewer->id === $post->user_id)
+
+                    <div class="flex justify-end space-x-4 mt-4">
+                    <a href="{{ route('posts.edit', $post) }}"
+                      class="text-blue-600 hover:text-blue-800 text-sm inline-block">
+                      ✏️ Editar
+                    </a>
+                    <form action="{{ route('posts.edit', $post) }}"
+                          method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esse post?')"
+                          class="inline">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit"
+                              class="text-red-600 hover:text-red-800 text-sm">
+                        🗑️ Excluir meu post
+                      </button>
+                    </form>
+                  </div>
                 @endif
               </div>
             </li>
@@ -101,11 +129,11 @@
         <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($likedPosts as $post)
             <li class="bg-white rounded-lg shadow hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-              <div class="aspect-w-16 aspect-h-9">
+              <div class="overflow-hidden rounded-t">
                 <img
                   src="{{ asset('storage/' . $post->image_path) }}"
                   alt="{{ $post->title }}"
-                  class="w-full h-full object-cover"
+                  class="w-full h-auto object-cover max-h-96"
                 >
               </div>
 

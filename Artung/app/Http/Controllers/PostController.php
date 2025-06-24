@@ -14,6 +14,15 @@ class PostController extends Controller
         return view('posts.create');
     }
 
+    public function edit(Post $post)
+    {
+        if ($post->user_id !== auth()->id()) {
+            return redirect()->route('AcessoNegado.notice');
+        }
+
+        return view('posts.edit', compact('post'));
+    } 
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -48,7 +57,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->user_id !== auth()->id()) {
-            abort(403, 'Você não tem permissão para excluir este post.');
+            return redirect()->route('AcessoNegado.notice');
         }
 
         if ($post->image_path) {
@@ -94,5 +103,22 @@ class PostController extends Controller
              ->delete();
 
         return back();
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $data = $request->validate([
+            'title'         => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'tag1_id'       => 'nullable|exists:tags,id',
+            'tag2_id'       => 'nullable|exists:tags,id',
+            'tag3_id'       => 'nullable|exists:tags,id',
+        ]);
+
+        $post->update($data);
+
+    return redirect()
+        ->route('profile.show', auth()->user()->id)
+        ->with('success', 'Post atualizado com sucesso!');
     }
 }
